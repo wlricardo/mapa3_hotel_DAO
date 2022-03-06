@@ -1,9 +1,19 @@
 package mapa.application;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import mapa.controls.HospedeDAO;
+import mapa.controls.HospedeImpl;
+import mapa.controls.ReservaDAO;
+import mapa.controls.ReservaImpl;
+import mapa.controls.SuiteDAO;
+import mapa.controls.SuiteImpl;
 import mapa.dialogs.Mensagem;
+import mapa.entities.Hospede;
+import mapa.entities.Reserva;
 import mapa.exceptions.ValorIncorretoException;
 
 public class MAPA3_Hotel {
@@ -13,78 +23,123 @@ public class MAPA3_Hotel {
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
 
-        int opcao = -1;
+        ReservaDAO reservaDAO = new ReservaImpl();
+        HospedeDAO hospedeDAO = new HospedeImpl();
+        SuiteDAO suiteDAO = new SuiteImpl();
+
+        List<Reserva> listaReservas = new ArrayList<>();
+        int opcao;
 
         do {
+            // Receber opção do menu
             do {
                 try {
                     Mensagem.mostrarMenu();
-                    opcao = receberInteiro("");
+                    opcao = Mensagem.inserirInteiro("");
                     if (opcao < 0 || opcao > 6) {
-                        throw new ValorIncorretoException("\n ** Informe valores entre [0-6] **\n");
+                        throw new ValorIncorretoException(Mensagem.erroNumerico());
                     }
                     break;
                 } catch (InputMismatchException e) {
-                    System.out.println("\n ** Informe apenas valores numéricos **\n");
+                    System.out.println(Mensagem.erroNumerico());
                 } catch (ValorIncorretoException e) {
-                    System.out.println();
+                    System.out.println(e.getMessage());
                 }
             } while (true);
+            // ---------------------
 
-            try {
-                switch (opcao) {
+            switch (opcao) {
+                // 1 - RESERVAR SUITE
+                case 1 -> {
+                    int numeroDeHospedes = 0;
+                    int codigo = 0, idade = 0;
+                    String nome = null, endereco = null;
+                    List<Hospede> listaDeHospedes = new ArrayList<>();
 
-                    // 1 - RESERVAR SUITE
-                    case 1 -> {
+                    Mensagem.cadastrarHospedes();
+                    // Receber número de hóspedes
+                    do {
+                        try {
+                            numeroDeHospedes = Mensagem.inserirInteiro("Quantidade de hóspedes: ");
+                            if (numeroDeHospedes <= 0) {
+                                throw new ValorIncorretoException(Mensagem.erroNumerico());
+                            }
+                            break;
+                        } catch (ValorIncorretoException e) {
+                            System.out.println(e.getMessage());
+                        } catch (InputMismatchException e) {
+                            Mensagem.erroNumerico();
+                        }
+                    } while (true);
 
+                    /*
+                        Fornecendo dados dos hóspedes
+                     */
+                    for (int i = 0; i < numeroDeHospedes; i++) {
+                        // Código
+                        do {
+                            try {
+                                codigo = Mensagem.inserirInteiro("Código do hóspede: ");
+                                hospedeDAO.verificarCodigo(codigo);
+                                break;
+                            } catch (InputMismatchException | ValorIncorretoException e) {
+                                System.out.println(Mensagem.erroNumerico());
+                            }
+                        } while (true);
+                        // ---------------------
+
+                        // Nome
+                        do {
+                            try {
+                                nome = Mensagem.inserirTexto("Nome do hóspede: ");
+                                hospedeDAO.verificarNome(nome);
+                                break;
+                            } catch (ValorIncorretoException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        } while (true);
+                        // ---------------------
+
+                        // Endereço
+                        endereco = Mensagem.inserirTexto("Endereço do hóspede: ");
+
+                        // Idade do hóspede
+                        do {
+                            try {
+                                idade = Mensagem.inserirInteiro("Idade do hóspede: ");
+                                hospedeDAO.verificarIdade(idade);
+                                break;
+                            } catch (ValorIncorretoException e) {
+                                System.out.println(e.getMessage());
+                            } catch (InputMismatchException e) {
+                                System.out.println(Mensagem.erroNumerico());
+                            }
+                        } while (true);
                     }
-                    case 2 -> {
-                    }
-                    case 3 -> {
-                    }
-                    case 4 -> {
-                    }
-                    case 5 -> {
-                    }
-                    case 0 -> {
-                    }
-                    default -> {
-                        System.out.println("\n ** Opção inválida **\n");
-                    }
+                    // Instanciando um hóspede
+                    Hospede h = new Hospede(codigo, nome, endereco, idade);
+                    listaDeHospedes.add(h);
+                }
+
+                // 2 - Alterar suite
+                case 2 -> {
 
                 }
-                // CADASTRAR
-                // ALTERAR
-                // LISTAR
-                // LOCALIZAR POR NOME
-                // EXCLUIR
 
-            } catch (Exception e) {
+                default -> {
+                }
 
-                //coletarTexto("----Tecle ENTER para continuar----");
             }
 
+            // 1 - RESERVAR SUITE
+            // 1 - RESERVAR SUITE
+            // 1 - RESERVAR SUITE
+            // CADASTRAR
+            // ALTERAR
+            // LISTAR
+            // LOCALIZAR POR NOME
+            // EXCLUIR
+            //coletarTexto("----Tecle ENTER para continuar----");
         } while (opcao != 0);
-
-    }
-
-    private static int receberInteiro(String msg) {
-        int valor = new Scanner(System.in).nextInt();
-        if (valor <= 0) {
-            throw new ValorIncorretoException("\n ** Forneça valores inteiros maiores que zero **\n");
-        }
-        return valor;
-    }
-
-    private static double inserirReal(String descricao) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(descricao);
-        return scanner.nextDouble();
-    }
-
-    private static String inserirTexto(String descricao) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(descricao);
-        return scanner.nextLine();
     }
 }

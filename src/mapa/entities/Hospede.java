@@ -3,10 +3,10 @@ package mapa.entities;
 import java.util.Objects;
 
 public class Hospede {
-    
+
     private Integer codigo;
     private String nome;
-    private String endereco;   
+    private String endereco;
     private Integer idade;
 
     public Hospede() {
@@ -18,8 +18,8 @@ public class Hospede {
         this.endereco = endereco;
         this.idade = idade;
     }
-    
-     public Integer getCodigo() {
+
+    public Integer getCodigo() {
         return codigo;
     }
 
@@ -77,15 +77,11 @@ public class Hospede {
 
     @Override
     public String toString() {
-        return "Código: " + codigo 
-                + "\nNome:" + nome 
-                + "\nEndereço: " + endereco 
-                + "\nIdade=" + idade 
+        return "Código: " + codigo
+                + "\nNome:" + nome
+                + "\nEndereço: " + endereco
+                + "\nIdade=" + idade
                 + '\n';
     }
-
-    
-    
-    
 
 }
