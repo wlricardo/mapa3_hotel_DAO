@@ -4,10 +4,10 @@ import mapa.exceptions.ValorIncorretoException;
 
 public interface SuiteDAO {
 
-    void inputNumero(int numero) throws ValorIncorretoException;
+    void verificarNumero(int numero) throws ValorIncorretoException;
 
-    void inputCapacidade(int capacidade) throws ValorIncorretoException;
+    void verificarCapacidade(int capacidade) throws ValorIncorretoException;
 
-    void inputValor(double valor) throws ValorIncorretoException;
+    void verificarValor(double valor) throws ValorIncorretoException;
 
 }

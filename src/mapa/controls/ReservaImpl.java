@@ -37,10 +37,10 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
-    public boolean verificarReserva(List<Reserva> lista, Suite suite) {
+    public boolean verificarReserva(List<Reserva> lista, int suite) {
         boolean achou = false;
         for (Reserva r : lista) {
-            if (r.getSuite().getNumero().equals(suite.getNumero())) {
+            if (r.getSuite().getNumero() == suite) {
                 achou = true;
             }
         }
@@ -50,7 +50,7 @@ public class ReservaImpl implements ReservaDAO {
     @Override
     public List<Hospede> mostrarHospedeSuite(List<Reserva> lista, Suite suite) {
         List<Hospede> hospedes = null;
-        if (verificarReserva(lista, suite)) {
+        if (verificarReserva(lista, suite.getNumero())) {
             for (Reserva r : lista) {
                 if (r.getSuite().equals(suite)) {
                     hospedes = r.getHospedes();
@@ -65,7 +65,7 @@ public class ReservaImpl implements ReservaDAO {
     @Override
     public void mostrarReserva(List<Reserva> lista, Suite suite) {
         List<Hospede> h = null;
-        if (verificarReserva(lista, suite)) {
+        if (verificarReserva(lista, suite.getNumero())) {
             System.out.println("Dados da reserva:");
             System.out.println("----------------");
             System.out.println(suite.toString());

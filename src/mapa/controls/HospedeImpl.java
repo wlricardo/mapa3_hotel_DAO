@@ -1,5 +1,7 @@
 package mapa.controls;
 
+import java.util.List;
+import mapa.entities.Hospede;
 import mapa.exceptions.ValorIncorretoException;
 
 public class HospedeImpl implements HospedeDAO {
@@ -22,6 +24,15 @@ public class HospedeImpl implements HospedeDAO {
     public void verificarIdade(int idade) {
         if (idade <= 0) {
             throw new ValorIncorretoException(msgErro());
+        }
+    }
+    
+    @Override
+    public void mostrarHospedes(List<Hospede> lista){
+        System.out.println("\n Lista de hóspedes: ");
+        System.out.println("\n ------------------ ");
+        for (Hospede h : lista) {
+            System.out.println(h.toString());            
         }
     }
 

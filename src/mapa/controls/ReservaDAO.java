@@ -15,7 +15,7 @@ public interface ReservaDAO {
 
     void adicionarReserva(List<Reserva> lista, Reserva reserva);
 
-    boolean verificarReserva(List<Reserva> lista, Suite suite) throws ElementoNaoEncontradoException;
+    boolean verificarReserva(List<Reserva> lista, int suite) throws ElementoNaoEncontradoException;
 
     List<Hospede> mostrarHospedeSuite(List<Reserva> reserva, Suite suite) throws ElementoNaoEncontradoException;
 

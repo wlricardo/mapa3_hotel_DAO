@@ -1,31 +1,28 @@
 package mapa.controls;
 
+import mapa.dialogs.Mensagem;
 import mapa.exceptions.ValorIncorretoException;
 
 public class SuiteImpl implements SuiteDAO {
-    
+
     @Override
-    public void inputNumero(int numero) {
+    public void verificarNumero(int numero) {
         if (numero <= 0) {
-            throw new ValorIncorretoException(msgErro());
+            throw new ValorIncorretoException(Mensagem.erroNumerico());
         }
     }
 
     @Override
-    public void inputCapacidade(int capacidade) {
+    public void verificarCapacidade(int capacidade) {
         if (capacidade <= 0) {
-            throw new ValorIncorretoException(msgErro());
+            throw new ValorIncorretoException(Mensagem.erroNumerico());
         }
     }
 
     @Override
-    public void inputValor(double valor) {
+    public void verificarValor(double valor) {
         if (valor <= 0) {
-            throw new ValorIncorretoException(msgErro());
+            throw new ValorIncorretoException(Mensagem.erroNumerico());
         }
-    }
-
-    public String msgErro() {
-        return "\n** Erro! Valor inválido. Tente novamente **\n";
     }
 }
