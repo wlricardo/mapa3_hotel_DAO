@@ -51,6 +51,21 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
+    public boolean procurarHospede(List<Reserva> lista, String nome) {
+        boolean achou = false;
+        for (Reserva r : lista) {
+            for (Hospede h : r.getHospedes()) {
+                if (h.getNome().equalsIgnoreCase(nome)) {
+                    System.out.print("\n Nome do hóspede: " + h.getNome());
+                    System.out.println("\n Hospedado na suíte #" + r.getSuite().getNumero() + "\n");
+                    achou = true;
+                }
+            }
+        }
+        return achou;
+    }
+
+    @Override
     public void mostrarHospedeSuite(List<Reserva> lista, int suite) {
         List<Hospede> hospedes = null;
         if (procurarReserva(lista, suite)) {
