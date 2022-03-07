@@ -61,7 +61,7 @@ public class MAPA3_Hotel {
                     int numeroDeHospedes = 0;
                     int codigo = 0, idade = 0;
                     int numeroDaSuite = 0, capacidade = 0;
-                    String nome = null, endereco = null, tipo = null;
+                    String nome = null, endereco, tipo = null;
                     double valorDaDiaria = 0;
 
                     do {
