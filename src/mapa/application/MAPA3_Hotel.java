@@ -212,10 +212,46 @@ public class MAPA3_Hotel {
                         Mensagem.mostrarReservas();
                         if (reservaDAO.verificarReservas(listaDeReservas)) {
                             throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                        } else {
+                            reservaDAO.listarTodasAsReservas(listaDeReservas);
                         }
                     } catch (ElementoNaoEncontradoException e) {
                         System.out.println(e.getMessage());
                     }
+                }
+
+                // 3 - Localizar suite
+                case 3 -> {
+                    Mensagem.mostrarSuite();
+                    do {
+                        int numeroSuite;
+                        do {
+                            try {
+                                numeroSuite = Mensagem.inserirInteiro("Que suite deseja procurar ? \n> ");
+                                suiteDAO.verificarNumero(numeroSuite);
+                                break;
+                            } catch (ValorIncorretoException | InputMismatchException e) {
+                                System.out.println(Mensagem.erroNumerico());
+                            }
+                        } while (true);
+                        try {
+                            // Se não houver reservas cadastradas
+                            if (reservaDAO.verificarReservas(listaDeReservas)) {
+                                throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                            } else {
+                                try {
+                                    // Se houver a suite, exibe, senão, lança erro
+                                    Suite s = reservaDAO.procurarCodigoSuite(listaDeReservas, numeroSuite);
+                                    reservaDAO.mostrarHospedeSuite(listaDeReservas, s.getNumero());
+                                    break;
+                                } catch (ElementoNaoEncontradoException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+                        } catch (ElementoNaoEncontradoException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } while (true);
                 }
 
                 default -> {

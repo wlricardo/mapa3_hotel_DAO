@@ -26,10 +26,16 @@ public abstract class Mensagem {
         System.out.println("     Cadastrado da suite   ");
         System.out.println("-------------------------");
     }
-    
+
     public static void mostrarReservas() {
         System.out.println("\n-------------------------");
         System.out.println("     Suites reservadas   ");
+        System.out.println("-------------------------");
+    }
+
+    public static void mostrarSuite() {
+        System.out.println("\n-------------------------");
+        System.out.println("     Localizar suite     ");
         System.out.println("-------------------------");
     }
 
@@ -67,7 +73,7 @@ public abstract class Mensagem {
     public static String erroCapacidade() {
         return "\n ** Erro! Total de hóspedes maior que a capaciade da suite **\n";
     }
-    
+
     public static String erroReserva() {
         return "\n ** Erro! Reserva não efetuada **\n";
     }

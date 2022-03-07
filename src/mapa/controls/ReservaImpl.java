@@ -51,18 +51,20 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
-    public List<Hospede> mostrarHospedeSuite(List<Reserva> lista, Suite suite) {
+    public void mostrarHospedeSuite(List<Reserva> lista, int suite) {
         List<Hospede> hospedes = null;
-        if (procurarReserva(lista, suite.getNumero())) {
+        if (procurarReserva(lista, suite)) {
+            System.out.println();
             for (Reserva r : lista) {
-                if (r.getSuite().equals(suite)) {
-                    hospedes = r.getHospedes();
+                if (r.getSuite().getNumero().equals(suite)) {
+                    for (Hospede h : r.getHospedes()) {
+                        System.out.println(h.toString());
+                    }
                 }
             }
         } else {
-            throw new ElementoNaoEncontradoException(msgErro());
+            throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
         }
-        return hospedes;
     }
 
     @Override
