@@ -89,6 +89,21 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
+    public void listarTodasAsReservas(List<Reserva> listaDeTodasAsReservas) {
+        int cont = 0;
+        for (Reserva r : listaDeTodasAsReservas) {
+            System.out.println("\nINFORMAÇÕES DA RESERVA #" + (cont + 1) + ":\n");
+            mostrarReserva(r);
+            cont++;
+        }
+    }
+
+    @Override
+    public boolean verificarReservas(List<Reserva> reservas) {
+        return (reservas.isEmpty());
+    }
+
+    @Override
     public double calcularDiaria(Suite s, int diarias) {
         double desconto = 1;
         if (diarias > 7) {

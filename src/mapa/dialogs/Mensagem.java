@@ -26,6 +26,12 @@ public abstract class Mensagem {
         System.out.println("     Cadastrado da suite   ");
         System.out.println("-------------------------");
     }
+    
+    public static void mostrarReservas() {
+        System.out.println("\n-------------------------");
+        System.out.println("     Suites reservadas   ");
+        System.out.println("-------------------------");
+    }
 
     public static double inserirReal(String descricao) {
         System.out.print(descricao);
@@ -55,7 +61,7 @@ public abstract class Mensagem {
     }
 
     public static String erroNaoEncontrada() {
-        return "\n ** Erro! Não foram encontradas reservas para essa suite **\n";
+        return "\n ** Erro! Não foram encontradas reservas **\n";
     }
 
     public static String erroCapacidade() {

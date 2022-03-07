@@ -15,6 +15,7 @@ import mapa.dialogs.Mensagem;
 import mapa.entities.Hospede;
 import mapa.entities.Reserva;
 import mapa.entities.Suite;
+import mapa.exceptions.ElementoNaoEncontradoException;
 import mapa.exceptions.ReservaInvalidaException;
 import mapa.exceptions.ValorIncorretoException;
 
@@ -205,9 +206,16 @@ public class MAPA3_Hotel {
                     reservaDAO.mostrarReserva(r);
                 }
 
-                // 2 - Alterar suite
+                // 2 - Listar reservas
                 case 2 -> {
-
+                    try {
+                        Mensagem.mostrarReservas();
+                        if (reservaDAO.verificarReservas(listaDeReservas)) {
+                            throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                        }
+                    } catch (ElementoNaoEncontradoException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
 
                 default -> {

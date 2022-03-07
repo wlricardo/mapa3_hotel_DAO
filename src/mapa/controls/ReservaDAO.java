@@ -19,9 +19,14 @@ public interface ReservaDAO {
 
     List<Hospede> mostrarHospedeSuite(List<Reserva> reserva, Suite suite) throws ElementoNaoEncontradoException;
 
+    void listarTodasAsReservas(List<Reserva> listaDeReservas);
+    
+    boolean verificarReservas(List<Reserva> reservas) throws ElementoNaoEncontradoException;
+
     void mostrarReserva(Reserva r) throws ElementoNaoEncontradoException;
 
     double calcularDiaria(Suite s, int diarias);
 
     double calcularTotalDeDiarias(List<Reserva> lista);
+
 }
