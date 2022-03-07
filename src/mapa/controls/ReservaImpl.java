@@ -92,7 +92,7 @@ public class ReservaImpl implements ReservaDAO {
     public void listarTodasAsReservas(List<Reserva> listaDeTodasAsReservas) {
         int cont = 0;
         for (Reserva r : listaDeTodasAsReservas) {
-            System.out.println("\nINFORMAÇÕES DA RESERVA #" + (cont + 1) + ":\n");
+            System.out.println("\nINFORMAÇÕES DA RESERVA #" + (cont + 1) + ":");
             mostrarReserva(r);
             cont++;
         }
