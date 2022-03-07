@@ -1,6 +1,7 @@
 package mapa.controls;
 
 import java.util.List;
+import mapa.dialogs.Mensagem;
 import mapa.entities.Hospede;
 import mapa.entities.Reserva;
 import mapa.entities.Suite;
@@ -25,9 +26,11 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
-    public void verificarCapacidade(Reserva reserva, int capacidade) {
-        if (hospedesAcimaDoisAnos(reserva) > capacidade) {
-            throw new ReservaInvalidaException("\n ** Erro! Total de hóspedes maior que a capaciade da suite **\n");
+    public boolean verificarCapacidade(List<Hospede> lista, int capacidade) {
+        if (hospedesAcimaDoisAnos(lista) <= capacidade) {
+            return true;
+        } else {
+            throw new ReservaInvalidaException(Mensagem.erroCapacidade());
         }
     }
 
@@ -37,10 +40,10 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
-    public boolean verificarReserva(List<Reserva> lista, int suite) {
+    public boolean procurarReserva(List<Reserva> lista, int numSuite) {
         boolean achou = false;
         for (Reserva r : lista) {
-            if (r.getSuite().getNumero() == suite) {
+            if (r.getSuite().getNumero() == numSuite) {
                 achou = true;
             }
         }
@@ -50,7 +53,7 @@ public class ReservaImpl implements ReservaDAO {
     @Override
     public List<Hospede> mostrarHospedeSuite(List<Reserva> lista, Suite suite) {
         List<Hospede> hospedes = null;
-        if (verificarReserva(lista, suite.getNumero())) {
+        if (procurarReserva(lista, suite.getNumero())) {
             for (Reserva r : lista) {
                 if (r.getSuite().equals(suite)) {
                     hospedes = r.getHospedes();
@@ -63,24 +66,50 @@ public class ReservaImpl implements ReservaDAO {
     }
 
     @Override
-    public void mostrarReserva(List<Reserva> lista, Suite suite) {
-        List<Hospede> h = null;
-        if (verificarReserva(lista, suite.getNumero())) {
-            System.out.println("Dados da reserva:");
-            System.out.println("----------------");
-            System.out.println(suite.toString());
+    public void mostrarReserva(Reserva r) {
+        List<Hospede> hospedes = r.getHospedes();
 
-            h = mostrarHospedeSuite(lista, suite);
-            for (Hospede hospede : h) {
-                System.out.println(hospede.toString());
-            }
+        System.out.println("\nDADOS DA RESERVA:");
+        System.out.println("----------------");
+        System.out.println(r.getSuite().toString());
 
+        for (Hospede h : hospedes) {
+            System.out.println(h.toString());
         }
+
+        double valorDiaria = r.getSuite().getValorDiaria();
+        int diarias = r.getQtdDias();
+        System.out.println("\nCÁLCULO DAS DIÁRIAS:");
+        System.out.println("-------------------");
+        System.out.println("  VALOR DA DIÁRIA  : R$ " + valorDiaria);
+        System.out.println("  TOTAL DE DIÁRIAS : " + diarias);
+        System.out.println("  TOTAL            : R$ " + calcularDiaria(r.getSuite(), diarias));
+        System.out.println("\n");
+
     }
 
-    public int hospedesAcimaDoisAnos(Reserva reserva) {
+    @Override
+    public double calcularDiaria(Suite s, int diarias) {
+        double desconto = 1;
+        if (diarias > 7) {
+            desconto = 0.9;
+        }
+        return (desconto * (s.getValorDiaria() * diarias));
+    }
+
+    @Override
+    public double calcularTotalDeDiarias(List<Reserva> lista) {
+        double total = 0.0;
+
+        for (Reserva r : lista) {
+            total += (calcularDiaria(r.getSuite(), r.getQtdDias()));
+        }
+        return total;
+    }
+
+    public int hospedesAcimaDoisAnos(List<Hospede> lista) {
         int total = 0;
-        for (Hospede h : reserva.getHospedes()) {
+        for (Hospede h : lista) {
             if (h.getIdade() > 2) {
                 total++;
             }

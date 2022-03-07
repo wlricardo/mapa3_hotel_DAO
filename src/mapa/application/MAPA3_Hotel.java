@@ -14,7 +14,7 @@ import mapa.controls.SuiteImpl;
 import mapa.dialogs.Mensagem;
 import mapa.entities.Hospede;
 import mapa.entities.Reserva;
-import mapa.exceptions.ElementoNaoEncontradoException;
+import mapa.entities.Suite;
 import mapa.exceptions.ReservaInvalidaException;
 import mapa.exceptions.ValorIncorretoException;
 
@@ -53,18 +53,20 @@ public class MAPA3_Hotel {
             switch (opcao) {
                 // 1 - RESERVAR SUITE
                 case 1 -> {
+                    List<Hospede> listaDeHospedes = new ArrayList<>();
+                    Reserva r;
                     Hospede h;
+                    Suite s;
+                    int qtdDeDiarias = 0;
                     int numeroDeHospedes = 0;
                     int codigo = 0, idade = 0;
-                    String nome = null, endereco = null;
-                    int numeroDaSuite, capacidade;
-                    String tipo;
-                    double valorDaDiaria;
-                    List<Hospede> listaDeHospedes = new ArrayList<>();
+                    int numeroDaSuite = 0, capacidade = 0;
+                    String nome = null, endereco = null, tipo = null;
+                    double valorDaDiaria = 0;
 
                     do {
                         try {
-                            numeroDeHospedes = Mensagem.inserirInteiro("Quantidade de hóspedes: ");
+                            numeroDeHospedes = Mensagem.inserirInteiro("\nQuantidade de hóspedes: ");
                             if (numeroDeHospedes <= 0) {
                                 throw new ValorIncorretoException(Mensagem.erroNumerico());
                             }
@@ -117,32 +119,90 @@ public class MAPA3_Hotel {
                                 System.out.println(Mensagem.erroNumerico());
                             }
                         } while (true);
-
                         // Instanciando um hóspede
                         h = new Hospede(codigo, nome, endereco, idade);
                         listaDeHospedes.add(h);
-
                     }
+
                     /*
                         Fornecendo dados da suite
                      */
                     Mensagem.cadastrarSuite();
+                    // Número
                     do {
                         System.out.println("Dados da suite:");
                         try {
-                            numeroDaSuite = Mensagem.inserirInteiro("Número da suite: ");
-                            suiteDAO.verificarNumero(numeroDaSuite);
-                            if (reservaDAO.verificarReserva(listaDeReservas, numeroDaSuite)) {
-                                throw new ReservaInvalidaException(Mensagem.erroSuiteOcupada());
-                            }
+                            do {
+                                try {
+                                    numeroDaSuite = Mensagem.inserirInteiro("Número da suite: ");
+                                    suiteDAO.verificarNumero(numeroDaSuite);
+                                    if (reservaDAO.procurarReserva(listaDeReservas, numeroDaSuite)) {
+                                        throw new ReservaInvalidaException(Mensagem.erroSuiteOcupada());
+                                    }
+                                    break;
+                                } catch (ValorIncorretoException | InputMismatchException e) {
+                                    System.out.println(Mensagem.erroNumerico());
+                                }
+                            } while (true);
+                            // ---------------------
+
+                            // Tipo
+                            tipo = Mensagem.inserirTexto("Tipo da suíte: ");
+
+                            // Capacidade
+                            do {
+                                try {
+                                    capacidade = Mensagem.inserirInteiro("Capacidade da suíte: ");
+                                    suiteDAO.verificarCapacidade(capacidade);
+                                    if (!reservaDAO.verificarCapacidade(listaDeHospedes, capacidade)) {
+                                        throw new ReservaInvalidaException(Mensagem.erroCapacidade());
+                                    }
+                                    break;
+                                } catch (ValorIncorretoException | InputMismatchException e) {
+                                    System.out.println(Mensagem.erroNumerico());
+                                }
+                            } while (true);
+                            // ---------------------
+
+                            // Valor diária
+                            do {
+                                try {
+                                    valorDaDiaria = Mensagem.inserirReal("Valor da diária: R$ ");
+                                    suiteDAO.verificarValor(valorDaDiaria);
+                                    break;
+                                } catch (ValorIncorretoException | InputMismatchException e) {
+                                    System.out.println(Mensagem.erroNumerico());
+                                }
+                            } while (true);
                             break;
-                        } catch (ValorIncorretoException | InputMismatchException e) {
-                            System.out.println(Mensagem.erroNumerico());
                         } catch (ReservaInvalidaException e) {
                             System.out.println(e.getMessage());
                         }
                     } while (true);
-                    hospedeDAO.mostrarHospedes(listaDeHospedes);
+
+                    // Instanciando uma suite
+                    s = new Suite(numeroDaSuite, tipo, capacidade, valorDaDiaria);
+
+                    // Quantidade de diárias
+                    do {
+                        try {
+                            qtdDeDiarias = Mensagem.inserirInteiro("Quantidade de diárias: ");
+                            suiteDAO.verificarNumero(qtdDeDiarias);
+                            break;
+                        } catch (ValorIncorretoException | InputMismatchException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } while (true);
+
+                    // Instanciando uma reserva
+                    r = new Reserva(s, numeroDeHospedes, qtdDeDiarias, listaDeHospedes);
+
+                    // Adicionar a reserva à lista
+                    reservaDAO.adicionarReserva(listaDeReservas, r);
+
+                    // Mostrar reserva                    
+                    Mensagem.sucessoReserva();
+                    reservaDAO.mostrarReserva(r);
                 }
 
                 // 2 - Alterar suite

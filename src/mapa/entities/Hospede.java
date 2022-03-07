@@ -77,10 +77,10 @@ public class Hospede {
 
     @Override
     public String toString() {
-        return "  CÓDIGO   : " + codigo
-                + "\n  NOME     : " + nome.toUpperCase()
-                + "\n  ENDEREÇO : " + endereco.toUpperCase()
-                + "\n  IDADE    : " + idade
+        return "  HÓSPEDE   : " + codigo
+                + "\n  NOME      : " + nome.toUpperCase()
+                + "\n  ENDEREÇO  : " + endereco.toUpperCase()
+                + "\n  IDADE     : " + idade
                 + '\n';
     }
 }

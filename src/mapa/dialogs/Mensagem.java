@@ -7,11 +7,10 @@ public abstract class Mensagem {
     public static void mostrarMenu() {
         System.out.println("Sistema de reservas");
         System.out.println("[1] Reservar suite");
-        System.out.println("[2] Alterar suite");
-        System.out.println("[3] Listar reservas");
-        System.out.println("[4] Localizar suite");
-        System.out.println("[5] Localizar hóspede");
-        System.out.println("[6] Liberar suite");
+        System.out.println("[2] Listar reservas");
+        System.out.println("[3] Localizar suite");
+        System.out.println("[4] Localizar hóspede");
+        System.out.println("[5] Liberar suite");
         System.out.println("[0] Sair");
         System.out.print(">_ ");
     }
@@ -52,10 +51,22 @@ public abstract class Mensagem {
     }
 
     public static String erroSuiteOcupada() {
-        return "\n ** Erro! Suite já ocupada**\n";
+        return "\n ** Erro! Suite já ocupada **\n";
     }
 
     public static String erroNaoEncontrada() {
         return "\n ** Erro! Não foram encontradas reservas para essa suite **\n";
+    }
+
+    public static String erroCapacidade() {
+        return "\n ** Erro! Total de hóspedes maior que a capaciade da suite **\n";
+    }
+    
+    public static String erroReserva() {
+        return "\n ** Erro! Reserva não efetuada **\n";
+    }
+
+    public static void sucessoReserva() {
+        System.out.println("\n\n ** Reserva efetuada com sucesso ! **");
     }
 }

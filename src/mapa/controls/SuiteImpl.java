@@ -21,7 +21,7 @@ public class SuiteImpl implements SuiteDAO {
 
     @Override
     public void verificarValor(double valor) {
-        if (valor <= 0) {
+        if (valor <= 0.0) {
             throw new ValorIncorretoException(Mensagem.erroNumerico());
         }
     }
