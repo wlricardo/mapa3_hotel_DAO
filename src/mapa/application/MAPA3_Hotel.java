@@ -210,7 +210,7 @@ public class MAPA3_Hotel {
                 case 2 -> {
                     try {
                         Mensagem.mostrarReservas();
-                        if (reservaDAO.verificarReservas(listaDeReservas)) {
+                        if (reservaDAO.verificarReservasVazias(listaDeReservas)) {
                             throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
                         } else {
                             reservaDAO.listarTodasAsReservas(listaDeReservas);
@@ -223,51 +223,96 @@ public class MAPA3_Hotel {
                 // 3 - Localizar suite
                 case 3 -> {
                     Mensagem.mostrarSuite();
+                    int numeroSuite;
                     do {
-                        int numeroSuite;
-                        do {
-                            try {
-                                numeroSuite = Mensagem.inserirInteiro("Que suite deseja procurar ? \n> ");
-                                suiteDAO.verificarNumero(numeroSuite);
-                                break;
-                            } catch (ValorIncorretoException | InputMismatchException e) {
-                                System.out.println(Mensagem.erroNumerico());
-                            }
-                        } while (true);
                         try {
-                            // Se não houver reservas cadastradas
-                            if (reservaDAO.verificarReservas(listaDeReservas)) {
-                                throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
-                            } else {
-                                try {
-                                    // Se houver a suite, exibe, senão, lança erro
-                                    Suite s = reservaDAO.procurarCodigoSuite(listaDeReservas, numeroSuite);
-                                    reservaDAO.mostrarHospedeSuite(listaDeReservas, s.getNumero());
-                                    break;
-                                } catch (ElementoNaoEncontradoException e) {
-                                    System.out.println(e.getMessage());
-                                }
-                            }
-                        } catch (ElementoNaoEncontradoException e) {
-                            System.out.println(e.getMessage());
+                            numeroSuite = Mensagem.inserirInteiro("Que suite deseja procurar ? \n> ");
+                            suiteDAO.verificarNumero(numeroSuite);
+                            break;
+                        } catch (ValorIncorretoException | InputMismatchException e) {
+                            System.out.println(Mensagem.erroNumerico());
                         }
                     } while (true);
+                    try {
+                        // Se não houver reservas cadastradas
+                        if (reservaDAO.verificarReservasVazias(listaDeReservas)) {
+                            throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                        } else {
+                            try {
+                                // Se houver a suite, exibe, senão, lança erro
+                                Suite s = reservaDAO.procurarSuite(listaDeReservas, numeroSuite);
+                                reservaDAO.mostrarHospedeSuite(listaDeReservas, s.getNumero());
+                                break;
+                            } catch (ElementoNaoEncontradoException e) {
+                                System.out.println(Mensagem.erroNaoEncontrada());
+                            }
+                        }
+                    } catch (ElementoNaoEncontradoException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                }
+                case 4 -> {
+                    Mensagem.mostrarHospede();
+                    String nomeDoHospede;
+                    do {
+                        try {
+                            nomeDoHospede = Mensagem.inserirTexto("Nome do hóspede que deseja procurar: ");
+                            hospedeDAO.verificarNome(nomeDoHospede);
+                            break;
+                        } catch (ValorIncorretoException e) {
+                            System.out.println(Mensagem.erroValorVazio());
+                        }
+                    } while (true);
+                    try {
+                        // Se não houver reservas cadastradas
+                        if (reservaDAO.verificarReservasVazias(listaDeReservas)) {
+                            throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                        } else {
+                            try {
+                                if (reservaDAO.procurarHospede(listaDeReservas, nomeDoHospede)) {
+                                    break;
+                                } else {
+                                    throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                                }
+                            } catch (ElementoNaoEncontradoException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    } catch (ElementoNaoEncontradoException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
 
-                default -> {
+                // Liberar suite
+                case 5 -> {
+                    Mensagem.liberarSuite();
+                    int numeroDaSuite;
+                    do {
+                        try {
+                            numeroDaSuite = Mensagem.inserirInteiro("Número da suite a ser liberada: ");
+                            suiteDAO.verificarNumero(numeroDaSuite);
+                            break;
+                        } catch (ValorIncorretoException | InputMismatchException e) {
+                            System.out.println(Mensagem.erroNumerico());
+                        }
+                    } while (true);
+                    try {
+                        if (reservaDAO.verificarReservasVazias(listaDeReservas)) {
+                            throw new ReservaInvalidaException(Mensagem.erroNaoEncontrada());
+                        } else {
+                            if (reservaDAO.getReserva(listaDeReservas, numeroDaSuite) != null) {
+                                reservaDAO.liberarSuite(listaDeReservas, numeroDaSuite);
+                                Mensagem.sucessoLiberarReserva();
+                            } else {
+                                throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
+                            }
+                        }
+                    } catch (ReservaInvalidaException | ElementoNaoEncontradoException | IncompatibleClassChangeError e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-
             }
-
-            // 1 - RESERVAR SUITE
-            // 1 - RESERVAR SUITE
-            // 1 - RESERVAR SUITE
-            // CADASTRAR
-            // ALTERAR
-            // LISTAR
-            // LOCALIZAR POR NOME
-            // EXCLUIR
-            //coletarTexto("----Tecle ENTER para continuar----");
         } while (opcao != 0);
     }
 }
