@@ -11,7 +11,7 @@ import mapa.exceptions.ReservaInvalidaException;
 public class ReservaImpl implements ReservaDAO {
 
     @Override
-    public Suite procurarCodigoSuite(List<Reserva> lista, int codigo) {
+    public Suite procurarSuite(List<Reserva> lista, int codigo) {
         Suite s = null;
         for (Reserva r : lista) {
             if (r.getSuite().getNumero() == codigo) {
@@ -21,7 +21,7 @@ public class ReservaImpl implements ReservaDAO {
         if (s != null) {
             return s;
         } else {
-            throw new ElementoNaoEncontradoException(msgErro());
+            throw new ElementoNaoEncontradoException(Mensagem.erroNaoEncontrada());
         }
     }
 
@@ -113,18 +113,21 @@ public class ReservaImpl implements ReservaDAO {
             mostrarReserva(r);
             cont++;
         }
+        System.out.println("---------------------------");
+        System.out.println(" VALOR DE TODAS AS DIÁRIAS: R$ " + calcularTotalDeDiarias(listaDeTodasAsReservas) + "\n\n");
     }
 
     @Override
-    public boolean verificarReservas(List<Reserva> reservas) {
+    public boolean verificarReservasVazias(List<Reserva> reservas) {
         return (reservas.isEmpty());
     }
 
     @Override
     public double calcularDiaria(Suite s, int diarias) {
         double desconto = 1;
+        double taxa = 0.1;
         if (diarias > 7) {
-            desconto = 0.9;
+            desconto -= taxa;
         }
         return (desconto * (s.getValorDiaria() * diarias));
     }
@@ -139,6 +142,25 @@ public class ReservaImpl implements ReservaDAO {
         return total;
     }
 
+    @Override
+    public Reserva getReserva(List<Reserva> lista, int suite) {
+        Reserva r = null;
+        for (Reserva reserva : lista) {
+            if (reserva.getSuite().getNumero().equals(suite)) {
+                r = reserva;
+            }
+        }
+        return r;
+    }
+
+    @Override
+    public void liberarSuite(List<Reserva> lista, int inteiro) {
+        Reserva r = getReserva(lista, inteiro);
+        if (r != null) {
+            lista.remove(r);
+        }
+    }
+
     public int hospedesAcimaDoisAnos(List<Hospede> lista) {
         int total = 0;
         for (Hospede h : lista) {
@@ -148,9 +170,4 @@ public class ReservaImpl implements ReservaDAO {
         }
         return total;
     }
-
-    public String msgErro() {
-        return "\n** Elmento não encontrado **\n";
-    }
-
 }
