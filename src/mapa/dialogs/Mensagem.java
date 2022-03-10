@@ -39,6 +39,18 @@ public abstract class Mensagem {
         System.out.println("-------------------------");
     }
 
+    public static void mostrarHospede() {
+        System.out.println("\n-------------------------");
+        System.out.println("    Localizar hóspede    ");
+        System.out.println("-------------------------");
+    }
+
+    public static void liberarSuite() {
+        System.out.println("\n-------------------------");
+        System.out.println("      Liberar suite      ");
+        System.out.println("-------------------------");
+    }
+
     public static double inserirReal(String descricao) {
         System.out.print(descricao);
         return new Scanner(System.in).nextDouble();
@@ -51,7 +63,7 @@ public abstract class Mensagem {
 
     public static String inserirTexto(String descricao) {
         System.out.print(descricao);
-        return new Scanner(System.in).nextLine();
+        return new Scanner(System.in).nextLine().toUpperCase();
     }
 
     public static String erroNumerico() {
@@ -80,5 +92,9 @@ public abstract class Mensagem {
 
     public static void sucessoReserva() {
         System.out.println("\n\n ** Reserva efetuada com sucesso ! **");
+    }
+
+    public static void sucessoLiberarReserva() {
+        System.out.println("\n ** Reserva liberada com sucesso ! **\n");
     }
 }
